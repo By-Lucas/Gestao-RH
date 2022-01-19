@@ -37,6 +37,7 @@ sys.path.append(
 # APPS CRIADAS E INSTALADAS
 INSTALLED_APPS += [
     'empresas',
+    'funcionarios',
 ]
 
 
