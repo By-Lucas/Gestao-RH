@@ -2,3 +2,4 @@
 venv
 __pycache__
 *.pyc
+gestao_rh/__pycache__/  #comando para funcionar = git rm --cached gestao_rh/__pycache__/ -r
