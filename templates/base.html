@@ -8,13 +8,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
 
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/modal-login.css' %}">
+    <script src="{% static 'js/modal-login.js' %}"></script>
+
+    
     <title>{% block title %} Gestão RH {% endblock %}</title>
 </head>
 <body>
 
-    <div class="container">
+    
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="p-4 pt-5">
+		  		<a href="{% url 'login' %}" >
+            <img class="img logo rounded-circle mb-5" src="{% static 'images/logo.jpg' %}" alt="">
+          </a>
+
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+	            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+	            <ul class="collapse list-unstyled" id="homeSubmenu">
+                <li>
+                    <a href="#">Home 1</a>
+                </li>
+                <li>
+                    <a href="#">Home 2</a>
+                </li>
+                <li>
+                    <a href="#">Home 3</a>
+                </li>
+	            </ul>
+	          </li>
+	          <li>
+	              <a href="#">About</a>
+	          </li>
+	          <li>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="#">Page 1</a>
+                </li>
+                <li>
+                    <a href="#">Page 2</a>
+                </li>
+                <li>
+                    <a href="#">Page 3</a>
+                </li>
+              </ul>
+	          </li>
+	          <li>
+              <a href="#">Portfolio</a>
+	          </li>
+	          <li>
+              <a href="#">Contatos</a>
+	          </li>
+	        </ul>
+
+	        <div class="footer">
+	        	<p><!-- Link para Colorlib não pode ser removido. O modelo está licenciado sob CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    Todos os direitos reservados. <br>
+                    Sistema desenvolvido <i class="icon-heart" aria-hidden="true"></i> por: <a href="https://colorlib.com" target="_blank">tkprogramacoes.com</a>
+                    <!-- Link para Colorlib não pode ser removido. O modelo está licenciado sob CC BY 3.0 -->
+                </p>
+	        </div>
+
+	      </div>
+    	</nav>
+        
+        <!-- pagina Content  -->
+      <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            {% if  user.is_authenticated %}
+            <button type="button" id="sidebarCollapse" class="btn btn-outline-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            {% endif %}
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contatos</a>
+                </li>
+                <li class="nav-item">
+                {% if user.is_authenticated %}
+                    <a style="margin-left: 30px;" class="btn btn-outline-danger" href="{% url 'sair' %}">Logout</a>
+                {% else %}
+                <label class="btn btn-outline-success" for="dialog_state">Login</label>
+
+                   
+                {% endif %}
+              </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
         {% block main %} {% endblock %}
     </div>
+</div>
 
+
+<!-- MODAL DE LOGIN ---------------------------------------->
+<input type="checkbox" name="dialog_state" id="dialog_state" class="dialog_state">
+<div id='dialog'>
+  <label id="dlg-back" for="dialog_state"></label>
+  <div id='dlg-wrap'>
+
+    <label id="dlg-close" for="dialog_state"><i class="icon ion-ios-close-empty"></i></label>
+    <h2 id='dlg-header'>Pagina de Login</h2>
+    <div id='dlg-content'>You are about to kill a puppy, that's some serious shit. Have you really thought this through?</div>
+    <div id='dlg-prompt'>
+
+      <form  method="post"> {% csrf_token %}
+
+        <div class="form-row align-items-center">
+          <div class="form-group col-md-8">
+            <label for="inputEmail4">Usuário</label>
+            <input type="text" name="username"class="form-control" id="inputEmail4" placeholder="Usuário">
+          </div>
+          
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-8">
+            <label for="inputPassword4">Senha</label>
+            <input type="password" name="password" class="form-control" id="inputPassword4" placeholder="Senha">
+          </div>
+        </div>
+
+        <button  style="margin-left: 30px;" class="button positive" type="submit">
+        Fazer login
+        </button>
+        
+        <div class='button'><i class="icon ion-ios-close-empty">
+        </i> No, I'll reconsider</div>
+        
+      </form>
+      
+    </div>
+  </div>
+</div>
+<!-- FIM DO MODAL DE LOGIN ---------------------------------------->
+  
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
