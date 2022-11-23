@@ -1,0 +1,69 @@
+{% load qr_code %}
+<style>
+    #uni_modal .modal-footer {
+        display: none
+    }
+    
+    #uni_modal .modal-sub-footer {
+        display: flex
+    }
+
+    dt{
+        padding-bottom: 5px;
+    }
+    
+    #card-qr,
+    #card-avatar {
+        width: 9rem;
+        height: 9rem;
+    }
+</style>
+<div class="container-fluid" id="e-details">
+    <div class="d-flex w-100 justify-content-center my-4">
+        <img src="{% if funcionario.foto_funcionatio %}{{funcionario.foto_funcionatio.url}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
+    </div>
+    <div class="lh-1">
+        <form action="" method="post">{% csrf_token %}
+            <div class="row">
+            
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <dl>
+                    <dt>Employee Code</dt>
+                    <dd>{{funcionario.funcionario_code}}</dd>
+                    <dt>Nome</dt>
+                    <dd>{{funcionario.name}}</dd>
+                    <dt>Departmentos</dt>
+                    <dd>{% for departamento in funcionario.departamentos.all %}{{ departamento }} , {% endfor %}</dd>
+                    <dt>Posição</dt>
+                    <dd>{{employee.position}}</dd>
+                </dl>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <dl>
+                    <dt>Gênero</dt>
+                    <dd>{{funcionario.genero}}</dd>
+                    <dt>Data de aniversário</dt>
+                    <dd>{{funcionario.dob|date:'M d, Y'}}</dd>
+                    <dt>Contato #</dt>
+                    <dd>{{funcionario.telefone}}</dd>
+                    <dt>Email</dt>
+                    <dd>{{funcionario.email}}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <dl>
+                    <dt>Endereço</dt>
+                    <dd>{{employee.address}}</dd>
+                </dl>
+            </div>
+        </div>
+        <button type="commit" class="btn btn-success">Bater ponto</button>
+    </form>
+    </div>
+</div>
+<script>
+    var emp_edit_url = "{% url 'edit-employee' funcionario.pk %}"
+    var emp_delete_url = "{% url 'deletar_funcionario' funcionario.pk %}"
+</script>

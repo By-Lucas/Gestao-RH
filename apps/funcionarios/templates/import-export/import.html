@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <h3>Importe Data</h3>
+  <p>Importar para o banco de dados</p>
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="importData">
+      <p>Por favor selecione o formato.</p>
+      <select name="file-format" class="form-control my-3 col-md-3">
+          <option selected>Escolha o formato...</option>
+          <option>CSV</option>
+          <option>JSON</option>
+        </select>
+      <button class="btn btn-primary col-md-2" type="submit">Importar</button>
+    </form>
+  <a href="{% url 'list_funcionarios' %}">Funcionarios</a>
+</div>
+  {% endblock %}

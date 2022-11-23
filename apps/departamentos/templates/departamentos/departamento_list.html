@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Departamentos {% endblock %}
+
+{% load bootstrap5 %}
+
+{% block main %}
+<div class="container">
+    <div class="row">
+        <div class="col-md" style="align-items: center; padding-top: 15px;">
+            <p style="float: left;font-size: 30px;">Departamentos</p>
+        </div>
+        <div class="col-md" style="align-items: center; padding-top: 15px;">
+            <a href="{% url 'create_departamento' %}" class="btn btn-outline-success" style="float: right; font-size: 18px;">Cadastrar Departamento</a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Empresa</th>
+                <th scope="col">Opcções</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+                {% for departamento in object_list %}
+                    <tr>
+                        <th scope="row">{{ departamento.id }}</th>
+                        <td><a href="{% url 'update_departamento' departamento.id %}">{{ departamento }}</a></td>
+                        <td>{{ departamento.empresa }}</td>
+                        <td>
+                        {% buttons %}
+                            <a  href="{% url 'delete_departamento' departamento.id %}" class="btn btn-danger">Delete</a>
+                        {% endbuttons %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+</div>
+    
+{% endblock %}
+

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+
+{% block main %} 
+<form class="row" action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <br>
+    {% buttons %}
+        <button type="submit" class="btn btn-success col-md-2">Salvar</button>
+        <!--object.id = PASSADO COMO PARAMENTRO O ID DO FUNCIONARIO QUE ESTA ABERTO-->
+        <a href="{% url 'create_documento' object.id %}" class="btn btn-warning col-md-3">Adcionar documentos </a>
+    {% endbuttons %}
+</form>
+{% for documento in object.documento_set.all %}
+    <a style="font-size: 20px;" href="{{documento.arquivo.url}}">{{documento}}</a> | 
+{% endfor %}
+
+{% endblock %}

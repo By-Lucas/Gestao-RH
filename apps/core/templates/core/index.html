@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% load humanize %} {% load customfilter %} 
+
+
+{% load static %}
+
+  {% block main %}
+        <div class="container-fluid">
+            {% if user.is_authenticated %}
+                <p class="usuario">Usuário: <span class="text-success"> {{ usuario.funcionario.nome }}
+                {{ usuario.funcionario.sobrenome }}
+                </span></p>
+            {% else %}
+                <p>{{ usuario.funcionario.sobrenome }}</p>
+            {% endif %}
+            <h2 class="mb-4">Inicio</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate v
+                elit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt 
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco l
+                aboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in v
+                luptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                 non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+        
+        <div class="row">
+            <a class="btn btn-primary"  id="scanner-link" aria-current="page" href="javascript:void(0)" data_url="{% url 'view-scanner' %}">QRCODE</a>
+        </div>
+
+{% endblock %}
+
+{% block ScriptBlock %}
+<!--PARTE DOS CRIPT PARA ABRIR WEBCAM E FAZER A BUSCA DO FUNCIONARIO-->
+<script>
+    $(function() {
+        $('#topNav .nav-link').each(function() {
+            var current = '{{ request.get_full_path | urlencode }}'
+            if (current == $(this).attr('href')) {
+                $(this).parent().addClass('active')
+            }
+        })
+        $('#scanner-link').click(function(){
+            uni_modal("QR Scanner", $(this).attr('data_url'))
+        })
+    })
+</script>
+<script>
+</script>
+{% endblock ScriptBlock %}

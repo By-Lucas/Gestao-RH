@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+    {% if user.is_authenticated %}
+        <h2>Usuario já está autenticado com:  {{user.first_name}} {{ user.last_name }}</h2>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Entrar</button>
+        </form>
+    {% endif %}
+{% endblock %}

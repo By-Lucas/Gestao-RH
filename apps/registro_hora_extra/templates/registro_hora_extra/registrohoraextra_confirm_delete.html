@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load bootstrap5 %}
+
+{% block main %} 
+<form class="row" action="" method="POST">
+    {% csrf_token %}
+    <h2>Deseja deletar Hora extra do funcionario(a): {{ obj }} ?</h2>
+    <br>
+    {% buttons %}
+        <button type="submit" class="btn btn-outline-danger col-md-2">Deletar</button>
+        <a href="{% url 'list_horas_extra' %}" class="btn btn-outline-primary  col-md-2">Voltar</a>
+    {% endbuttons %}
+</form>
+
+{% endblock %}

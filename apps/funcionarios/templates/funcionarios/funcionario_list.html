@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %} Funcionários {% endblock %}
+
+{% load bootstrap5 %}
+
+{% block main %}
+<div class="container">
+    <div class="row">
+      <div class="col-md" style="align-items: center; padding-top: 15px;">
+        <p style="float: left;font-size: 30px;">Funcionários</p>
+    </div>
+    <div class="col-md" style="align-items: center; padding-top: 15px;">
+        <a href="{% url 'create_funcionario' %}" class="btn btn-outline-success" style="float: right; font-size: 18px;">Cadastrar funcionário</a>
+    </div>
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">ID QR Code</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Empresa</th>
+                <th scope="col">Departamento</th>
+                <th scope="col">Opcções</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+                {% for funcionario in object_list %}
+                    <tr>
+                        <th scope="row">{{ funcionario.id }}</th>
+                        <td>{{funcionario.funcionario_code}}</td>
+                        <td><a href="{% url 'update_funcionario' funcionario.id %}">{{ funcionario.nome }}</a></td>
+                        <td>{{ funcionario.empresa }}</td>
+                        <td>{% for departamento in funcionario.departamentos.all %}{{ departamento }} , {% endfor %}</td>
+                        <td>
+                            {% buttons %}
+                                <a class="btn btn-danger" href="{% url 'delete_funcionario' funcionario.id %}">Delete</a>
+                                <a class="btn btn-outline-primary view_card" href="javascript:void(0)" data-url="{% url 'view-card' funcionario.pk %}" >Ver ID</a>
+                                <a class="btn btn-outline-success view_detail" href="javascript:void(0)" data-url="{% url 'view-details' funcionario.funcionario_code %}" >Ver dados</a>
+                            {% endbuttons %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block ScriptBlock %}
+<script>
+    $(function() {
+        $('table').find('td, th').addClass('align-middle px-2 py-1')
+        $('.view_card').click(function(){
+            uni_modal("View Employee ID", $(this).attr('data-url'),'modal-lg')
+        })
+        $('.view_detail').click(function(){
+            uni_modal("View Employee Details", $(this).attr('data-url'),'modal-md')
+        })
+        $('#uni_modal').on('shown.bs.modal', function() {
+            if ($('#id-card').length > 0) {
+                var print_btn = $('<button id="print-card" class="btn btn-success btn-sm bg-gradient rounded-0 me-2" type="button"><i class="fa fa-print"></i> Print</button>')
+                $(this).find('.modal-sub-footer').prepend(print_btn)
+                print_btn.click(function() {
+                    var h = $("head").clone()
+                    var style = $($("noscript#qr-style").html()).clone()
+                    var card = $("#id-card").clone()
+                    var el = $('<div>')
+
+                    el.append(h)
+                    el.append(style)
+                    el.append(card)
+                    start_loader()
+                    var nw = window.open("", "_blank", "width=900, height=900")
+                    nw.document.write(el.html())
+                    nw.document.close()
+                    setTimeout(()=>{
+                        nw.print()
+                        setTimeout(()=>{
+                            nw.close()
+                            end_loader()
+                        }, 300)
+                    },300)
+
+                })
+
+                $('#uni_modal').on('hide.bs.modal', function() {
+                    print_btn.remove()
+                })
+            }
+
+        })
+    })
+</script>
+
+{% endblock ScriptBlock %}

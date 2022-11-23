@@ -1,0 +1,32 @@
+{% if messages %}
+    <div class="row">
+        <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }} w-100 rounded-0 mb-2 redirect-msg">
+                <div class="d-flex w-100">
+                    <div class="col-auto flex-shrink-1 flex-grow-1">{{ message|safe }}</div>
+                    <div class="col-auto text-center">
+                        <button class="btn-close btn-sm text-sm" type="button" onclick="$(this).closest('.alert').remove()"></button>
+                    </div>
+                </div>
+
+            </div>
+            {% if message.extra_tags != 'stay' %}
+            <script>
+                $(function() {
+                    if ($('.redirect-msg').length > 0) {
+                        setTimeout(() => {
+                            $('.redirect-msg').hide('slideUp')
+                            setTimeout(() => {
+                                $('.redirect-msg').remove()
+                            }, 500)
+                        }, 3500)
+                    }
+        
+                })
+            </script>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

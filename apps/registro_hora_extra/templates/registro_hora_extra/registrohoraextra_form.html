@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Editar banco de horas {% endblock %}
+{% load bootstrap5 %}
+
+{% block main %}
+<div class="container">
+    <div style="align-items: center; display:flex; justify-content: center;">
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <div class=" col-md-6 alert {{message.tags}} alert-dismissible fade show" style="display:flex; justify-content: center;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <h2>Editar hora extra</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-outline-success">Salvar alterações</button>
+        {% if object %}
+            <a href="{% url 'delete_hora_extra' object.id %}" class="btn btn-outline-danger col-md-2">Deletar</a>
+        {% endif %}
+        <a href="{% url 'list_horas_extra' %}" class="btn btn-outline-primary col-md-2">Voltar</a>
+    </form>
+</div>
+
+{% endblock %}

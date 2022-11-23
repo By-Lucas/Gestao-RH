@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block main %} 
+<form class="row" action="" method="POST">
+    {% csrf_token %}
+    <h2>Deseja deletar funcionario(a): {{ obj }} ?</h2>
+    <br>
+    {% buttons %}
+        <button type="submit" class="btn btn-danger col-md-2">Deletar</button>
+        <a href="{% url 'list_funcionarios' %}" class="btn btn-primary col-md-2">Voltar</a>
+    {% endbuttons %}
+</form>
+
+{% endblock %}

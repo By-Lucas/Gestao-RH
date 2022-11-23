@@ -1,0 +1,256 @@
+{% load qr_code %}{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pontos TK+</title>
+
+    <script src="{% static 'ponto_qrcode/assets/instascan.min.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/modal-login.css' %}">
+    <script src="{% static 'js/modal-login.js' %}"></script>
+
+    <!--Modelos de CPF, CNPJ e Data-->
+    <script  src="{% static 'js/cpf_cnpj_telefone.js' %}"></script>
+
+    <!-- DEPENDENCIAS DO QRCODE -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'ponto_qrcode/assets/default/css/style.css' %}">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js" integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'ponto_qrcode/assets/default/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'ponto_qrcode/assets/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'ponto_qrcode/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ponto_qrcode/assets/default/js/script.js' %}"></script>
+
+
+</head>
+<body>
+
+
+<section class="vh-100" style="background-color: #9A616D;">
+    <div class="container py-5 h-100 col-md-9">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+                {% include 'message-alert.html' %}
+                <div class="card" style="border-radius: 1rem;">
+                    <div class="row g-0">
+                        <div class="col-md-6 col-lg-6 d-none d-md-block" >
+                            <div id="scanner-holder" class="position-relative">
+                                <video id="scanner" style="border-radius:15px;" ></video>
+                                <div id="scanner-focus" class="position-absolute" style="border-radius:15px;">
+                                </div>
+                            </div>
+                            <div style="justify-content: center; display: flex; padding-top: -50px;">
+                                <img class="img-fluid" id="image-qrcode" src="{% static 'ponto_qrcode/images/qrcode.gif' %}">
+                                <!--<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />-->
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-5 d-flex align-items-center">
+                            <div class="card-body p-4 p-lg-2 text-black">
+
+                                <form method="post" action="{% url 'logar' %}">{% csrf_token %}
+                                    <div class="d-flex align-items-center mb-2 pb-1" style="justify-content: center; display: flex;">
+                                        <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                                        <span class="h1 fw-bold mb-0 ">Pontos TK+</span>
+                                    </div>
+
+                                    <h5 class="fw-normal mb-3 pb-1 text-center " style="letter-spacing: 1px;">Faça o login ou bata seu ponto</h5>
+
+                                    <div class="form-outline mb-1">
+                                        <input type="text" name="username" id="form2Example17" class="form-control form-control-lg" />
+                                        <label class="form-label" for="form2Example17">Endereço de email</label>
+                                    </div>
+
+                                    <div class="form-outline mb-2">
+                                        <input type="password" name="password" id="form2Example27" class="form-control form-control-lg" />
+                                        <label class="form-label" for="form2Example27">Senha</label>
+                                    </div>
+
+                                    <div class="pt-1 mb-4">
+                                    <button class="btn btn-dark btn-lg btn-block" type="submit">
+                                        <i class="fas fa-sign-in-alt" style="color: #ff6219; float: left; width: 32x; height: 32px;"></i>Login</button>
+                                    <a class="btn btn-dark btn-lg btn-block" id="scanner-btn" aria-current="page" href="javascript:void(0)" data_url="{% url 'scanner_qr' %}">
+                                        <i class="fas fa-qrcode" style="color: #ff6219; float: left; width: 32x; height: 32px;"></i>Bater ponto</a>
+                                    </div>
+
+                                    <a class="small text-muted" href="#!">Esqueceu sua senha?</a>
+                                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Ainda não tem cadastro? <a href="#!"
+                                        style="color: #393f81;">Registre-se aqui</a></p>
+                                    <a href="#!" class="small text-muted">Termos de uso.</a>
+                                    <a href="#!" class="small text-muted">Politica e privacidade</a>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="uni_modal" role='dialog'>
+    <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content rounded-0">
+            <div class="modal-header"style="justify-content: center; display: flex;">
+                <h5 >Detalhes do funcionário</h5>
+                {% include 'message-alert.html' %}
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn  btn-sm btn-flat btn-primary rounded-0" id='submit' onclick="$('#uni_modal form').submit()">Salvar</button>
+                <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+            <div class="modal-sub-footer">
+                <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="confirm_modal" role='dialog'>
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmação</h5>
+            </div>
+            <div class="modal-body">
+                <div id="delete_content"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-flat btn-primary rounded-0" id='confirm' onclick="">Continuar</button>
+                <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const loader = $('<div>')
+    loader.attr('id', 'pre-loader')
+    loader.html('<div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>')
+
+    window.start_loader = function() {
+        $('body').removeClass('loading')
+        if ($('#pre-loader').length > 0)
+            $('#pre-loader').remove();
+        $('body').append(loader)
+        $('body').addClass('loading')
+    }
+    window.end_loader = function() {
+        if ($('#pre-loader').length > 0)
+            $('#pre-loader').remove();
+        $('body').removeClass('loading')
+    }
+
+  window.uni_modal = function($title = '', $url = '', $size = "") {
+      start_loader()
+      $.ajax({
+          url: $url,
+          error: err => {
+              console.log()
+              alert("Um erro ocorreu 1")
+          },
+          success: function(resp) {
+              if (resp) {
+                  $('#uni_modal #modal-title').html($title)
+                  $('#uni_modal .modal-body').html(resp)
+
+                /* AQUI É O MODAL QUE DEVERIA SER EXIBIDO */
+                  
+                  if ($size != '') {
+                      $('#uni_modal .modal-dialog').addClass($size + '  modal-dialog-centered')
+                  } else {
+                      $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-md modal-dialog-centered")
+                  }
+                  $('#uni_modal').modal({
+                      backdrop: 'static',
+                      keyboard: false,
+                      focus: true
+                  })
+                  /*$('#uni_modal').modal('hide')*/ /* Aqui ocultou o modal*/
+                  $('#image-qrcode').hide()
+
+                  end_loader()
+              }
+          }
+      })
+  }
+  window._conf = function($msg = '', $func = '', $params = []) {
+      $('#confirm_modal #confirm').attr('onclick', $func + "(" + $params.join(',') + ")")
+      $('#confirm_modal .modal-body').html($msg)
+      $('#confirm_modal').modal('show')
+  }
+  
+
+    const args = {
+        video: document.getElementById('scanner'),
+        mirror: false
+    };
+
+    window.URL.createObjectURL = (stream) => {
+        args.video.srcObject = stream;
+        return stream;
+    };
+
+    const scanner = new Instascan.Scanner(args);
+    scanner.addListener('scan', function(content) {
+        // alert(content);
+        $('.modal').modal('hide')
+        start_loader()
+        setTimeout(() => {
+            uni_modal("Ver detalhes do funcionário", "{% url 'Bater_ponto_qrcode' %}/" + content)
+            scanner.stop()
+        }, 5000)
+    });
+    $('#uni_modal').on('shown.bs.modal', function() {
+        if ($('#scanner').length > 0) {
+            scanner.stop()
+            Instascan.Camera.getCameras().then(function(cameras) {
+                if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                } else {
+                    console.error('Nenhuma câmera encontrada.');
+                }
+            }).catch(function(e) {
+                console.error(e);
+            });
+        }
+    })
+    
+
+</script>
+
+<script>
+    $(function() {
+        $('#topNav .nav-link').each(function() {
+            var current = '{{ request.get_full_path | urlencode }}'
+            if (current == $(this).attr('href')) {
+                $(this).parent().addClass('active')
+            }
+        })
+        $('#scanner-btn').click(function(){
+            uni_modal("QR Scanner", $(this).attr('data_url'))
+        })
+    })
+  </script>
+
+<script  src="{% static 'js/modal-login.js' %}"></script>
+<script  src="{% static 'js/bootstrap.min.js' %}"></script>
+<script  src="{% static 'js/jquery.min.min.js' %}"></script>
+
+
+</body>
+</html>

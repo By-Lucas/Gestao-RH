@@ -1,0 +1,105 @@
+{% load qr_code %}
+<style>
+    #uni_modal .modal-footer {
+        display: none
+    }
+    
+    #uni_modal .modal-sub-footer {
+        display: flex
+    }
+    
+    .id-card {
+        width: 3in;
+        height: 100%; /*52vh*/
+        border: 2px solid var(--bs-dark);
+        padding: 1.5rem 1.5rem;
+    }
+    dt{
+        padding-bottom: 5px;
+    }
+    .centro_modal{
+        display: flex;
+        justify-content: center;
+    }
+
+    #card-qr,
+    #card-avatar {
+        width: 9rem;
+        height: 9rem;
+    }
+</style>
+<div class="container-fluid" id="id-card">
+    <div class="d-flex mb-3 centro_modal">
+        <div class="px-2">
+            <div class="id-card">
+                <div class="head-text text-center fw-bolder">{{system_name}}</div>
+                <div class="d-flex w-100 justify-content-center my-4">
+                    <img src="{% if funcionario.foto_funcionatio %}{{funcionario.foto_funcionatio.url}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
+                </div>
+                <div class="lh-1">
+                    <div class="text-center fw-bold">{{ funcionario.name }}</div>
+                    <div class="text-center fw-light text-sm">{% for departamento in funcionario.departamentos.all %}{{ departamento }} , {% endfor %}</div>
+                    <div class="text-center fw-light text-sm">{{ employee.position }}</div>
+                </div>
+                <div class="lh-1 text-center">
+                    <img src="{% qr_url_from_text funcionario.funcionario_code size=5 version=1 image_format='png' %}" id="card-qr" alt="">
+                    <div class="text-center"><b>{{funcionario.funcionario_code}}</b></div>
+                </div>
+            </div>
+        </div>
+        <div class="px-2">
+            <div class="id-card">
+                <div class="lh-1">
+                    <dl>
+                        <dt>Código do funcionário</dt>
+                        <dd>{{funcionario.funcionario_code}}</dd>
+                        <dt>Nome</dt>
+                        <dd>{{funcionario.name}}</dd>
+                        <dt>Empresa</dt>
+                        <dd>{{funcionario.empresa}}</dd>
+                        <dt>Departamento</dt>
+                        <dd>{% for departamento in funcionario.departamentos.all %}{{ departamento }} , {% endfor %}</dd>
+                        <dt>Contato</dt>
+                        <dd>{{funcionario.telefone}}</dd>
+                        <dt>Email</dt>
+                        <dd>{{funcionario.email}}</dd>
+                        <dt>Ultima atualização</dt>
+                        <dd>{{funcionario.atualizado_em}}</dd>
+                        <dt>Data cadastro</dt>
+                        <dd>{{funcionario.data_cadastro|date:'d M , Y'}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<noscript id="qr-style">
+<style>
+    * {
+        font-size: 12px;
+    }
+    * small {
+        font-size: 10px;
+    }
+    .id-card {
+        width: 2.11in;
+        height: 3.38in;
+        border: 2px solid var(--bs-dark);
+        padding: 2rem 1.5rem;
+        border-radius: 5px;
+    }
+    #card-avatar {
+        width: 1in;
+        height: 1in;
+    }
+    #card-qr {
+        width: .7in;
+        height: .7in;
+    }
+</style>
+</noscript>
+<script>
+    $(function() {
+
+    })
+</script>

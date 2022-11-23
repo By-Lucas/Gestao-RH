@@ -1,0 +1,211 @@
+{% extends "base.html" %} {% load humanize %} {% load customfilter %} {% load qr_code %} {% load static %}
+
+{% block main %}
+{% block headerContent %}
+<style>
+    img.img-thumbnail.avatar {
+        max-width: 200px;
+        max-height: 200px;
+    }
+</style>
+{% endblock headerContent %}
+<!--Section: Content-->
+<h3 class="fw-bolder">{{page_title}}</h3>
+<hr>
+<section class="py-3">
+    <div class="container">
+        <div class="card rounded-0 shadow-sm blur">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <form action="" id="employee-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ funcionario.id }}">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="employee_code" class="control-label">Funcionario ID/QR Code</label>
+                                    <input type="text" class="form-control form-control-sm rounded-0" autofocus id="employee_code" value="{{funcionario.funcionario_code}}" name="employee_code" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="first_name" class="control-label">Nome</label>
+                                    <input type="text" class="form-control form-control-sm rounded-0" id="first_name" name="nome" value="{{funcionario.nome}}" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="middle_name" class="control-label">Sobrenome</label>
+                                    <input type="text" class="form-control form-control-sm rounded-0" id="middle_name" name="sobrenome" value="{{funcionario.sobrenome}}" optional>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="last_name" class="control-label">Usuário</label>
+                                    <input type="text" class="form-control form-control-sm rounded-0" id="last_name" name="username" value="{{funcionario.user.username}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="dob" class="control-label">Data de Nascimento</label>
+                                    <input placeholder="Dia/Mês/Ano" type="date" class="form-control form-control-sm rounded-0 data dt_nascimento" id="dob" name="data_nascimento" value="{{funcionario.data_nascimento|date:'d/m/Y'}}" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="gender" class="control-label">Gênerno</label>
+                                    <select class="form-select form-select-sm rounded-0" id="gender" name="genero" requried>
+                                        {% if employe.gender == 'Masculino' %}
+                                        <option selected>Masculino</option>
+                                        {% else %}
+                                        <option>Masculino</option>
+                                        {% endif %}
+                                        {% if employe.gender == 'Feminino' %}
+                                        <option selected>Feminino</option>
+                                        {% else %}
+                                        <option>Outro</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="contact" class="control-label">Contato #</label>
+                                    <input type="text" class="form-control form-control-sm rounded-0 telefone" id="contact" name="telefone" value="{{funcionario.telefone}}" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="email" class="control-label">Email</label>
+                                    <input type="email" class="form-control form-control-sm rounded-0" id="email" name="email" value="{{funcionario.email}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="address" class="control-label">Endereço</label>
+                                    <textarea rows="3" class="form-control form-control-sm rounded-0" id="address" name="address" Optional>{{funcionario.address}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="id_departamentos">Departamentos</label>
+                                        <select name="departamentos" class="form-select" title="" required="" id="id_departamentos"  multiple aria-label="multiple select example">
+                                            {% for departamento in funcionario.departamentos.all %}
+                                            <option value="{{departamento.id}}">{{departamento}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="position" class="control-label">Posição</label>
+                                    <input type="text" class="form-control form-control-sm rounded-0" id="position" name="posicao" value="{{funcionario.position}}" Optional>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
+                                <div class="mb-3">
+                                    <label for="avatar" class="form-label">Foto funcionario</label>
+                                    <input class="form-control" type="file" name="foto_funcionatio" id="avatar" accept="image/*" onchange="display_image(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
+                                <div class="mb-3">
+                                    <img src="{% if funcionario.foto_funcionatio %}{{funcionario.foto_funcionatio.url}}{% endif %}" alt="" class="img-thumbnail avatar" id="cimg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear-fix py-2"></div>
+                        <div class="text-end">
+                            <button class="btn btn-primary btn-sm rounded-0 bg-gradient"><i class="fa fa-save"></i> Salvar</button>
+                            <a href="{% url 'list_funcionarios' %}" class="btn btn-default border btn-sm rounded-0 bg-gradient"><i class="fa fa-angle-left"></i> Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div> 
+{% endblock main %} 
+{% block ScriptBlock %}
+<!--Modelos de CPF, CNPJ e Data-->
+<script  src="{% static 'js/cpf_cnpj_telefone.js' %}"></script>
+
+<script>
+    function display_image(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#cimg').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            $('#cimg').attr('src', "{% if funcionario.foto_funcionatio %}{{funcionario.foto_funcionatio.url}}{% endif %}");
+        }
+    }
+    $(function() {
+        $('#employee-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-employee' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        location.href = "{% url 'list_funcionarios' %}" /*employee-page*/
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>
+{% endblock ScriptBlock %}

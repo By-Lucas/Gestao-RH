@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+    <h3>Exporte Data</h3>
+    <p>Exporte do banco de dados</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Por favor selecione o formato.</p>
+        <div class="">
+            <select name="file-format" class="form-control my-3 col-md-3">
+                <option selected>Escolha o formato...</option>
+                <option>CSV</option>
+                <option>JSON</option>
+                <option>XLS (Excel)</option>
+            </select>
+            <button class="btn btn-primary col-md-2" type="submit">Exportar</button>
+        </div>
+    </form>
+    <a href="{% url 'list_funcionarios' %}">Funcionarios</a>
+</div>
+{% endblock %} 

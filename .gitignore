@@ -1,0 +1,8 @@
+.idea
+*.sqlite3
+venv
+gestao_rh/__pycache__/
+*.pyc
+gestao_rh.pem
+executavel.exe
+executavel.py

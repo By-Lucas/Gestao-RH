@@ -1,0 +1,384 @@
+{% load static %}
+{% load customfilter %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/modal-login.css' %}">
+    <script src="{% static 'js/modal-login.js' %}"></script>
+
+    <!--Modelos de CPF, CNPJ e Data-->
+    <script  src="{% static 'js/cpf_cnpj_telefone.js' %}"></script>
+
+    <!-- DEPENDENCIAS DO QRCODE -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'ponto_qrcode/assets/default/css/style.css' %}">
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js" integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'ponto_qrcode/assets/default/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'ponto_qrcode/assets/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'ponto_qrcode/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ponto_qrcode/assets/default/js/script.js' %}"></script>
+ 
+    
+    <title>Gestão RH - {% block title %} {% endblock %}</title>
+
+    <style>
+      .modal-sub-footer {
+          display: flex;
+          flex-wrap: wrap;
+          flex-shrink: 0;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 0.75rem;
+          border-top: 1px solid #dee2e6;
+          border-bottom-right-radius: calc(0.3rem - 1px);
+          border-bottom-left-radius: calc(0.3rem - 1px);
+      }
+  </style>
+    {% block headerContent %} {% endblock headerContent %}
+</head>
+<body>
+
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="p-4 pt-5">
+		  		<a href="{% url 'home' %}" >
+            <img class="img logo rounded-circle mb-5" src="{% static 'images/img.png' %}" alt="">
+          </a>
+
+          {% if user.is_authenticated %}
+            <p class="usuario">Usuário: <span class="text-success"> {{ usuario.funcionario.nome }}
+              {{ user.funcionario.sobrenome }}
+            </span></p>
+          {% else %}
+            <p>{{ usuario.funcionario.sobrenome }}</p>
+          {% endif %}
+
+          <ul class="list-unstyled components mb-5">
+            <li class="active">
+              <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+              <ul class="collapse list-unstyled" id="homeSubmenu">
+                {% if user.funcionario.empresa %}
+                  <li>
+                      <a href="{% url 'edit_empresa' user.funcionario.empresa.id %}">Editar empresa</a>
+                  </li>
+                  <li>
+                    <a href="#">Editar perfil</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'list_funcionarios' %}">Gerenciar funcionario</a>
+                  </li>
+                {% elif not usuario.funcionario.empresa  %}
+                  <li>
+                    <a href="{% url 'create_empresa' %}">Cadastrar empresa</a>
+                  </li>
+                {% endif %}
+                <li>
+                  <a href="{% url 'create_funcionario' %}">Cadastrar funcionário</a>
+                </li>
+                <li>
+                    <a href="{% url 'list_horas_extra' %}">Banco de horas</a>
+                </li>
+              </ul>
+              </li>
+              <li>
+                  <a href="{% url 'list_funcionarios' %}">Funcionários</a>
+              </li>
+              <li>
+                <a href="{% url 'list_departamento' %}">Departamentos</a>
+              </li>
+              <li>
+                <a id="scanner-link" aria-current="page" href="javascript:void(0)" data_url="{% url 'view-scanner' %}">Busar por Qr Code</a>
+              </li>
+              <li>
+                <a href="{% url 'view_scanner_bater_ponto' %}">Login QR</a>
+              </li>
+              <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Opções</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="#">Page 1</a>
+                </li>
+                <li>
+                    <a href="#">Page 2</a>
+                </li>
+                <li>
+                    <a href="#">Page 3</a>
+                </li>
+              </ul>
+	          </li>
+	          <li>
+              <a href="#">Portfolio</a>
+	          </li>
+	          <li>
+              <a href="#">Contatos</a>
+	          </li>
+	        </ul>
+
+	        <div class="footer">
+	        	<p><!-- Link para Colorlib não pode ser removido. O modelo está licenciado sob CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    Todos os direitos reservados. <br>
+                    Desenvolvedor <i class="icon-heart" aria-hidden="true"></i>: <a href="" target="_blank">Lucas Silva</a>
+                    <!-- Link para Colorlib não pode ser removido. O modelo está licenciado sob CC BY 3.0 -->
+                </p>
+	        </div>
+
+	      </div>
+    	</nav>
+        
+        <!-- pagina Content  -->
+      <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            
+            <button type="button" id="sidebarCollapse" class="btn btn-outline-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sobre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contatos</a>
+                </li>
+                <li class="nav-item">
+                {% if user.is_authenticated %}
+                    <a style="margin-left: 30px;" class="btn btn-outline-danger" href="{% url 'sair' %}">Logout</a>
+                {% else %}
+                <label class="btn btn-outline-success" for="dialog_state">Login</label>
+
+                {% endif %}
+              </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        {% include 'message-alert.html' %}
+
+        {% block main %} {% endblock %}
+    </div>
+</div>
+
+{% block ScriptBlock %} {% endblock ScriptBlock %}
+
+<!-- MODAL DE LOGIN ---------------------------------------->
+<input type="checkbox" name="dialog_state" id="dialog_state" class="dialog_state">
+<div id='dialog'>
+  <label id="dlg-back" for="dialog_state"></label>
+  <div id='dlg-wrap'>
+
+    <label id="dlg-close" for="dialog_state"><i class="icon ion-ios-close-empty"></i></label>
+    <h2 id='dlg-header'>Pagina de Login</h2>
+    <div id='dlg-content'>
+      Efetua seu login. Se estiver esquiecido a senha é só ir até em esqueci a senha e pedir a alteração
+    </div>
+    <div id='dlg-prompt'>
+
+      <form   method="POST" action="{% url 'logar' %}"> {% csrf_token %}
+        <br>
+        <div class="form-row align-items-center">
+          <div class="form-group col-md-8">
+            <label for="inputEmail4">Usuário</label>
+            <input type="text" name="username"class="form-control" id="inputEmail4" placeholder="Usuário">
+          </div>
+          
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-8">
+            <label for="inputPassword4">Senha</label>
+            <input type="password" name="password" class="form-control" id="inputPassword4" placeholder="Senha">
+          </div>
+        </div>
+
+        <button  style="margin-left: 30px;" class="button positive" type="submit">
+        Fazer login
+        </button>
+        
+        <div class='button'><i class="icon ion-ios-close-empty">
+        </i> Cancelar</div>
+        <br>
+        
+      </form>
+      
+    </div>
+  </div>
+</div>
+<!-- FIM DO MODAL DE LOGIN ---------------------------------------->
+
+<div class="modal fade" id="uni_modal" role='dialog'>
+    <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content rounded-0">
+            <div class="modal-header"style="justify-content: center; display: flex;">
+                <h5 >Detalhes do funcionário</h5>
+                {% include 'message-alert.html' %}
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn  btn-sm btn-flat btn-primary rounded-0" id='submit' onclick="$('#uni_modal form').submit()">Salvar</button>
+                <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+            <div class="modal-sub-footer">
+                <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm_modal" role='dialog'>
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmação</h5>
+            </div>
+            <div class="modal-body">
+                <div id="delete_content"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-flat btn-primary rounded-0" id='confirm' onclick="">Continuar</button>
+                <button type="button" class="btn btn-sm btn-flat btn-light border rounded-0" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  const loader = $('<div>')
+  loader.attr('id', 'pre-loader')
+  loader.html('<div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>')
+
+  window.start_loader = function() {
+      $('body').removeClass('loading')
+      if ($('#pre-loader').length > 0)
+          $('#pre-loader').remove();
+      $('body').append(loader)
+      $('body').addClass('loading')
+  }
+  window.end_loader = function() {
+      if ($('#pre-loader').length > 0)
+          $('#pre-loader').remove();
+      $('body').removeClass('loading')
+  }
+  
+  window.uni_modal = function($title = '', $url = '', $size = "") {
+      start_loader()
+      $.ajax({
+          url: $url,
+          error: err => {
+              console.log()
+              alert("Um erro ocorreu 1")
+          },
+          success: function(resp) {
+              if (resp) {
+                  $('#uni_modal #modal-title').html($title)
+                  $('#uni_modal .modal-body').html(resp)
+                  if ($size != '') {
+                      $('#uni_modal .modal-dialog').addClass($size + '  modal-dialog-centered')
+                  } else {
+                      $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-md modal-dialog-centered")
+                  }
+                  $('#uni_modal').modal({
+                      backdrop: 'static',
+                      keyboard: false,
+                      focus: true
+                  })
+                  $('#uni_modal').modal('show')
+                  end_loader()
+              }
+          }
+      })
+  }
+  window._conf = function($msg = '', $func = '', $params = []) {
+      $('#confirm_modal #confirm').attr('onclick', $func + "(" + $params.join(',') + ")")
+      $('#confirm_modal .modal-body').html($msg)
+      $('#confirm_modal').modal('show')
+  }
+  
+  $(function() {
+      $('#uni_modal').on('shown.bs.modal', function() {
+          if ($('#e-details').length > 0) {
+              var delete_btn = $('<button id="delete-btn" class="btn btn-danger btn-sm bg-gradient rounded-0 me-2"><i class="fa fa-trash"></i> Delete</button>')
+              var edit_btn = $('<a id="edit-btn" href="' + emp_edit_url + '" class="btn btn-primary btn-sm bg-gradient rounded-0 me-2"><i class="fa fa-edit"></i> Edit</a>')
+              $(this).find('.modal-sub-footer').prepend(delete_btn)
+              $(this).find('.modal-sub-footer').prepend(edit_btn)
+              delete_btn.click(function() {
+                  _conf("Tem certeza de que deseja excluir este funcionário?", "delete_employee")
+              })
+
+              $('#uni_modal').on('hide.bs.modal', function() {
+                  delete_btn.remove()
+                  edit_btn.remove()
+              })
+
+          }
+      })
+  })
+
+  function delete_employee() {
+      start_loader()
+      $.ajax({
+          url: emp_delete_url,
+          error: err => {
+              console.error(err)
+              alert("Um erro ocorreu (Delete).")
+              end_loader()
+          },
+          success: function(resp) {
+              if (resp.status == 'success') {
+                  location.reload()
+              } else if (!!resp.msg) {
+                  alert(resp.msg)
+              }
+              end_loader()
+          }
+      })
+  }
+</script>
+
+<script>
+  $(function() {
+      $('#topNav .nav-link').each(function() {
+          var current = '{{ request.get_full_path | urlencode }}'
+          if (current == $(this).attr('href')) {
+              $(this).parent().addClass('active')
+          }
+      })
+      $('#scanner-link').click(function(){
+          uni_modal("QR Scanner", $(this).attr('data_url'))
+      })
+  })
+</script>
+
+<script  src="{% static 'js/modal-login.js' %}"></script>
+<script  src="{% static 'js/bootstrap.min.js' %}"></script>
+<script  src="{% static 'js/jquery.min.min.js' %}"></script>
+
+</body>
+</html>
