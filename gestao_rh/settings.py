@@ -47,6 +47,8 @@ INSTALLED_APPS += [
     #'django.contrib.humanize',
     'qr_code',
     'bootstrap5',
+
+    'django_celery_results'
 ]
 
 
@@ -131,21 +133,28 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles'),
+    os.path.join(BASE_DIR, 'static'),
 ]
-
 
 # para poder usar arquivsos de media 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 
-
 # Após fazer o login , redirecionar para a pagina home
 LOGIN_REDIRECT_URL  = 'home'
 
 LOGOUT_REDIRECT_URL  = 'login'
+
+# Celery settings
+CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
 
 MESSAGE_TAGS = {
 constants.DEBUG: 'alert-primary',
