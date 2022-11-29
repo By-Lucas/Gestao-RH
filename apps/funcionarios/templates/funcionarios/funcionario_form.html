@@ -5,18 +5,50 @@
 
 
 {% block main %} 
-<form class="row" action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <br>
-    {% buttons %}
-        <button type="submit" class="btn btn-success col-md-2">Salvar</button>
-        <!--object.id = PASSADO COMO PARAMENTRO O ID DO FUNCIONARIO QUE ESTA ABERTO-->
-        <a href="{% url 'create_documento' object.id %}" class="btn btn-warning col-md-3">Adcionar documentos </a>
-    {% endbuttons %}
-</form>
-{% for documento in object.documento_set.all %}
-    <a style="font-size: 20px;" href="{{documento.arquivo.url}}">{{documento}}</a> | 
-{% endfor %}
+<div class="container-fluid">
+    <form class="row" action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <br>
+        {% buttons %}
+            <button type="submit" class="btn btn-success col-md-2">Salvar</button>
+            <!--object.id = PASSADO COMO PARAMENTRO O ID DO FUNCIONARIO QUE ESTA ABERTO-->
+            
+        {% endbuttons %}
 
+        <div class="col-lg-12">
+            <h2>
+                Banco de horas: {{ object.total_horas_extra }} horas |
+                <span>
+                    <a href="{% url 'create_hora_extra' %}" class="text-primary">
+                        <i class="fa-solid fa-square-plus"></i>
+                    </a>
+                </span>
+            </h2>
+            
+            {% for registro_hora in object.registrohoraextra_set.all %}
+                <a style="font-size: 20px;" href="{% url 'update_hora_extra' registro_hora.id %}">
+                    {{registro_hora.motivo}} - {{registro_hora.horas}} |
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-12">
+            <h2>
+                Documentos
+                <span>
+                    <a href="{% url 'create_documento' object.id %}" class="text-primary">
+                        <i class="fa-solid fa-square-plus"></i>
+                    </a>
+                </span>
+            </h2>
+                
+            {% for documento in object.documento_set.all %}
+                <a style="font-size: 20px;" href="{{documento.arquivo.url}}">{{documento}}</a> |
+            {% endfor %}
+        </div>
+        
+        
+    </form>
+</div>
 {% endblock %}

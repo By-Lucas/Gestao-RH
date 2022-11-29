@@ -9,7 +9,7 @@ class RegistroHoraExtra(models.Model):
 
     #Quando editar informações ele retorna para update_hora_extra, passando o id
     def get_absolute_url(self):
-        return reverse('update_hora_extra', args=[self.id])
+        return reverse('update_funcionario', args=[self.funcionario.id])
 
     def __str__(self):
         return self.motivo

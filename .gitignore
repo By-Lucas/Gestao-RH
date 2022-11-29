@@ -4,5 +4,6 @@ venv
 gestao_rh/__pycache__/
 *.pyc
 gestao_rh.pem
+*.exe
 executavel.exe
 executavel.py

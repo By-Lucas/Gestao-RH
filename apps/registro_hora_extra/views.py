@@ -44,12 +44,39 @@ class HoraExtraUpdate(UpdateView):
     template_name = 'registro_hora_extra/registrohoraextra_form.html'
     model = RegistroHoraExtra
     form_class = HoraExtraForm
-    success_url = reverse_lazy('list_horas_extra')
+    #success_url = reverse_lazy('list_horas_extra')
 
     # Injetar usuario logado para entro do Form(HoraExtraUpdate)
     # Mostrar apenas usuarios da empresa logada
     def get_form_kwargs(self):
         Kwargs = super(HoraExtraUpdate, self).get_form_kwargs()
+        Kwargs.update({'user': self.request.user})
+        return Kwargs
+
+    def form_invalid(self, form):
+        print("form invalidod")
+        print(form.errors)
+        messages.add_message(self.request, constants.ERROR, "Hora extra não pode ser atualizada!")
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        form.save()
+        messages.add_message(self.request, constants.SUCCESS, "Hora extra atualizada com sucesso!")
+        return super().form_valid(form)
+
+
+class HoraExtraUpdateBase(UpdateView):
+    template_name = 'registro_hora_extra/registrohoraextra_form.html'
+    model = RegistroHoraExtra
+    form_class = HoraExtraForm
+
+    def get_success_url(self):
+        return reverse_lazy('update_hora_extra_base', args=[self.object.id])
+
+    # Injetar usuario logado para entro do Form(HoraExtraUpdateBase)
+    # Mostrar apenas usuarios da empresa logada
+    def get_form_kwargs(self):
+        Kwargs = super(HoraExtraUpdateBase, self).get_form_kwargs()
         Kwargs.update({'user': self.request.user})
         return Kwargs
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.models import User
 from departamentos.models import Departamento
 from empresas.models import Empresa
@@ -43,7 +44,13 @@ class Funcionario(models.Model):
     # Apos o formulario ser validado, vai redirecionar para a pagina abaixo
     def get_absolute_url(self):
         return reverse('list_funcionarios')
-    
+
+    @property
+    def total_horas_extra(self):
+        '''Faz todas a soma automaticamente das horas extras'''
+        total_extra = self.registrohoraextra_set.all().aggregate(
+            Sum('horas'))['horas__sum']
+        return total_extra
 
     class Meta:
         verbose_name = 'Funcionario'

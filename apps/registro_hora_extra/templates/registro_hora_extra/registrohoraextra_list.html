@@ -8,18 +8,6 @@
 
 {% block main %}
 <div class="container">
-    <div style="align-items: center; display:flex; justify-content: center;">
-      {% if messages %}
-          {% for message in messages %}
-              <div class=" col-md-6 alert {{message.tags}} alert-dismissible fade show" style="display:flex; justify-content: center;">
-                  {{ message }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-          {% endfor %}
-      {% endif %}
-    </div>
     <div class="row">
       <div class="col-md" style="align-items: center; padding-top: 15px;">
         <p style="float: left;font-size: 30px;">Banco de horas</p>
@@ -41,7 +29,7 @@
                 {% for registro_re in object_list %}
                     <tr>
                         <th scope="row">{{ registro_re.id }}</th>
-                        <td><a href="{% url 'update_hora_extra' registro_re.id %}">{{ registro_re.motivo }}</a></td>
+                        <td><a href="{% url 'update_hora_extra_base' registro_re.id %}">{{ registro_re.motivo }}</a></td>
                         <td>{{ registro_re.funcionario }}</td>
                         <td>{{ registro_re.horas }}</td>
                         <td>

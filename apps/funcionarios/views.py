@@ -9,6 +9,7 @@ from .models import Funcionario
 from .forms import ProfileForm
 from django.urls import reverse_lazy
 
+
 class FuncionariosList(ListView):
     model = Funcionario
     # Cada empresa verá apenas seus funcionários
@@ -16,15 +17,18 @@ class FuncionariosList(ListView):
         empresa_logada = self.request.user.funcionario.empresa
         return Funcionario.objects.filter(empresa=empresa_logada)
 
+
 class FuncionariosEdit(UpdateView):
     model = Funcionario
     fields=['nome', 'sobrenome', 
             'telefone', 'email', 
             'departamentos', 'foto_funcionatio']
 
+
 class FuncionariosDelete(DeleteView):
     model = Funcionario
     success_url = reverse_lazy('list_funcionarios')
+
 
 class FuncionariosCreate(CreateView):
     template_name = 'funcionarios/funcionario_register.html'
