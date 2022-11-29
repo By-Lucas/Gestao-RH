@@ -1,4 +1,5 @@
-from django.shortcuts import redirect, render
+import json
+from django.shortcuts import redirect, render, HttpResponse
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages import constants
@@ -6,6 +7,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import (
     ListView, UpdateView, 
     DeleteView, CreateView)
+
+from django.views import View
 
 from .models import RegistroHoraExtra
 from .forms import HoraExtraForm
@@ -102,3 +105,26 @@ class HoraExtraDelete(SuccessMessageMixin, DeleteView):
             messages.success(self.request, self.success_message)
             return super(HoraExtraDelete, self).delete(request, *args, **kwargs)
 
+
+class UtilizouHoraExtra(SuccessMessageMixin, View):
+    def post(self, *args, **kwargs):
+        
+        registro_hora_extra = RegistroHoraExtra.objects.get(id=kwargs['pk'])
+
+        if registro_hora_extra.utilizada == False:
+            text_btn = 'Desmarcar como utilizado'
+            success_message = "Hora extra marcada como utilizada"
+            registro_hora_extra.utilizada = True
+            
+        else:
+            text_btn = 'Marcar como utilizado'
+            success_message = "Hora extra desmarcada como utilizada"
+            registro_hora_extra.utilizada = False
+        
+        registro_hora_extra.save()
+
+        response = json.dumps({"mensagem": success_message,
+                        'buttom_text': text_btn})
+
+        print(self.request.POST)
+        return HttpResponse(response, content_type='application/json')

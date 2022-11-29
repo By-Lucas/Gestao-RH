@@ -5,6 +5,8 @@
 {% block title %} Editar banco de horas {% endblock %}
 {% load bootstrap5 %}
 
+
+
 {% block main %}
 <div class="container">
     <h2>Editar hora extra</h2>
@@ -12,11 +14,26 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-outline-success">Salvar alterações</button>
+        <input type="hidden" value="{{object.utilizada}}" id="id_utilizada">
+
+        {% if object.utilizada %}
+            <button type="button" onclick="UtilizouHoraExtra ({{ object.id }})" class="btn btn-outline-info" id="buttom_text">Desmarcar como utilizado</button>
+        {% else %}
+            <button type="button" onclick="UtilizouHoraExtra ({{ object.id }})" class="btn btn-outline-info"  id="buttom_text">Marcar como utilizado</button>
+        {% endif %}
+
         {% if object %}
             <a href="{% url 'delete_hora_extra' object.id %}" class="btn btn-outline-danger col-md-2">Deletar</a>
         {% endif %}
         <a href="{% url 'list_horas_extra' %}" class="btn btn-outline-primary col-md-2">Voltar</a>
     </form>
+
+    <p id="mensagem_alert" class="text-success"></p>
+
 </div>
 
 {% endblock %}
+
+{% block js %}
+<script src="{% static 'banco_de_horas/funcoes_ajax.js' %}"></script>
+{% endblock js %}

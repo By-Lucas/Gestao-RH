@@ -48,9 +48,9 @@ class Funcionario(models.Model):
     @property
     def total_horas_extra(self):
         '''Faz todas a soma automaticamente das horas extras'''
-        total_extra = self.registrohoraextra_set.all().aggregate(
+        total_extra = self.registrohoraextra_set.filter(utilizada=False).aggregate(
             Sum('horas'))['horas__sum']
-        return total_extra
+        return total_extra or 0
 
     class Meta:
         verbose_name = 'Funcionario'

@@ -27,9 +27,17 @@
             </h2>
             
             {% for registro_hora in object.registrohoraextra_set.all %}
-                <a style="font-size: 20px;" href="{% url 'update_hora_extra' registro_hora.id %}">
-                    {{registro_hora.motivo}} - {{registro_hora.horas}} |
-                </a>
+                {% if registro_hora.utilizada == False  %}
+                    <a class="text-primary" style="font-size: 20px;" href="{% url 'update_hora_extra' registro_hora.id %}">
+                        {{registro_hora.motivo}} - {{registro_hora.horas}} |
+                    </a>
+                {% else %}
+                    <a class="text-success" style="font-size: 20px;" disabled>
+                        {{registro_hora.motivo}} - {{registro_hora.horas}} 
+                        <i class="fa-solid fa-square-check"></i>
+                        |
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
 
